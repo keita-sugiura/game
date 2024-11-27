@@ -77,7 +77,7 @@ function start(){
         circles.push(new circle(gen(r+10,canvas.width-10-r),gen(10+r,canvas.height-10-r),gen(2,6),gen(2,6),r,gen(0,10)));
     }
 
-    window.addEventListener('click',(event) => {
+    window.addEventListener('mousedown',(event) => {
         click(event.clientX, event.clientY);
     })
 
