@@ -63,7 +63,7 @@ const light1 = addL(-1, 2, 4);
 // keyboard  //////////////////////////////
 let pressW = 0, pressS = 0, pressD = 0, pressA = 0;
 document.addEventListener('keydown', (e) => {
-    console.log('code:' + e.code + ', key:' + e.key);
+    //console.log('code:' + e.code + ', key:' + e.key);
     if (e.code == 'KeyX') {
         if (pointer.isLocked) pointer.unlock();
         else pointer.lock();
@@ -81,6 +81,35 @@ document.addEventListener('keyup', (e) => {
     if (e.code == 'KeyS') pressS = 0;
     if (e.code == 'KeyD') pressD = 0;
     if (e.code == 'KeyA') pressA = 0;
+});
+
+// レイキャスターを作成
+const raycaster = new THREE.Raycaster();
+
+// 赤色の円を描画する関数
+function drawCircleAtIntersection(point) {
+    const geometry = new THREE.CircleGeometry(0.1, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const circle = new THREE.Mesh(geometry, material);
+    circle.position.copy(point);
+    circle.rotation.x = -Math.PI / 2; // 地面に平行にする
+    scene.add(circle);
+}
+
+// 右クリックイベントをリッスン
+document.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+
+    // カメラの視線方向にレイキャストを設定
+    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+
+    // 地面との交点を計算
+    const intersects = raycaster.intersectObject(ground);
+    if (intersects.length > 0) {
+        const intersectionPoint = intersects[0].point;
+        intersectionPoint.y += 0.01; // 少し浮かせる
+        drawCircleAtIntersection(intersectionPoint);
+    }
 });
 
 // render ///////////////////////////////////
@@ -117,7 +146,7 @@ groundFolder.add(ground.scale, 'x', 1, 10).name('Scale').onChange((value) => {
 groundFolder.open();
 
 // baseHeightのコントロールを追加
-gui.add(params, 'baseHeight', 0, 2).name('Base Height').onChange((value) => {
+gui.add(params, 'baseHeight', 0.1, 2).name('Base Height').onChange((value) => {
     camera.position.y = value;
 });
 
