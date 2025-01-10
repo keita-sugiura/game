@@ -23,10 +23,12 @@ const addOne = (color, x, y, z) => {
     //scene.add(mesh);
     return mesh;
 }
-
-let obj = addOne(0x0000ff, 1, 1, 1);
-scene.add(obj);
-obj.position.set(1, 3, 1);
+for(let i = 0; i < 50; i++){
+    let obj = addOne(0x0000ff, 1, 1, 1);
+    scene.add(obj);
+    const genRand=(l,r)=>l+(r-l)*Math.random();
+    obj.position.set(genRand(-5,5),genRand(0,8),genRand(-5,5));
+}
 { // crosshair
     const geometry = new THREE.RingGeometry(0, 0.001, 10);
     const material = new THREE.MeshBasicMaterial({ color: 0x555555 });
