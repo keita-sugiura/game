@@ -16,7 +16,7 @@ scene.background = new THREE.Color().setHex(0x22bb77);
 
 const addOne = (color, x, y, z) => {
     const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-    const material = new THREE.MeshBasicMaterial({ color: color });
+    const material = new THREE.MeshPhongMaterial({ color: color });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(x, y, z);
     mesh.renderOrder = 1;
