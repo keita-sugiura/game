@@ -23,11 +23,13 @@ const addOne = (color, x, y, z) => {
     //scene.add(mesh);
     return mesh;
 }
+const cubes = [];
 for(let i = 0; i < 50; i++){
     let obj = addOne(0x0000ff, 1, 1, 1);
     scene.add(obj);
     const genRand=(l,r)=>l+(r-l)*Math.random();
     obj.position.set(genRand(-5,5),genRand(0,8),genRand(-5,5));
+    cubes.push(obj);
 }
 { // crosshair
     const geometry = new THREE.RingGeometry(0, 0.001, 10);
