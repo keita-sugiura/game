@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 const width = window.innerWidth, height = window.innerHeight;
 
@@ -46,6 +48,25 @@ scene.add(ground);
 ground.rotation.x = -Math.PI / 2;
 
 
+// フォントを読み込み、テキストを作成
+const loader = new FontLoader();
+loader.load('font.json', function (font) {
+    const textGeometry = new TextGeometry('press x to control the view', {
+        font: font,
+        size: 0.06,
+        height: 0.001,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 0.01,
+        bevelSize: 0.001,
+        bevelOffset: 0,
+        bevelSegments: 5
+    });
+    const textMaterial = new THREE.MeshPhongMaterial({ color: "#1D1B7B" });
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    textMesh.position.set(0.05, 0.1, 0); // テキストの位置を設定
+    scene.add(textMesh);
+});
 
 
 // axes   //////////////////////////////
