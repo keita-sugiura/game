@@ -27,7 +27,7 @@ const light1 = addL(-20, 20, 20);
 
 // object //////////////////////////////
 
-var map1 = new THREE.TextureLoader().load('steel.jpg');
+var map1 = new THREE.TextureLoader().load('steel2.jpg');
 
 // オブジェクトを一度作成してシーンに追加
 const blockMeshes = Array.from({ length: 10 }, (_, x) => 
@@ -67,13 +67,6 @@ for(let i=0;i<10;i++){
     mesh.renderOrder = 0;
     camera.add(mesh);
 }
-
-var map1 = new THREE.TextureLoader().load('sougen.jpg');
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.MeshPhongMaterial({ map: map1 }));
-//scene.add(ground);
-ground.rotation.x = -Math.PI / 2;
-ground.position.set(5, 0, 5); // 平面の位置を調整
-
 
 // 文字  //////////////////////////////
 const loader = new FontLoader();
@@ -131,6 +124,9 @@ document.addEventListener('keyup', (e) => {
     if (e.code == 'KeyA') pressA = 0;
 });
 
+// sound
+const soundKachi = new Audio('kachi.mp3');
+
 // レイキャスターを作成
 const raycaster = new THREE.Raycaster();
 
@@ -145,7 +141,8 @@ document.addEventListener('mousedown', (event) => {
     const intersects = raycaster.intersectObjects(blockMeshes.flat(2)).filter(intersect => intersect.object.visible);
     if (intersects.length > 0) {
         const intersectedObject = intersects[0].object;
-        intersectedObject.visible = !intersectedObject.visible;
+        intersectedObject.visible = false;
+        soundKachi.play();
     }
 });
 
@@ -154,15 +151,6 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(width, height);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
-
-
-
-// GUI   ///////////////////
-const gui = new GUI();
-const groundFolder = gui.addFolder('Ground Scale');
-groundFolder.add(ground.scale, 'x', 1, 10).name('Scale').onChange((value) => {
-    ground.scale.set(value, value, value);
-});
 
 // FPS
 const pointer = new PointerLockControls(camera, renderer.domElement);
