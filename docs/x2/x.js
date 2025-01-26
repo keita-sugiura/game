@@ -37,7 +37,7 @@ const blockMeshes = Array.from({ length: 10 }, (_, x) =>
             const material =new THREE.MeshPhongMaterial({ map: map1 })
             const mesh = new THREE.Mesh(geometry, material);
             mesh.position.set(x+0.05, y+0.05, z+0.05);
-            mesh.visible = false; // 初期状態では非表示
+            mesh.isExplosive = Math.random() < 0.5; 
             boxScene.add(mesh);
             return mesh;
         })
@@ -52,7 +52,7 @@ const toggleBlock = (x, y, z) => {
 for(let i=0;i<10;i++){
     for(let j=0;j<10;j++){
        for(let k=0;k<10;k++){
-           if(Math.random()<0.2){
+           if(Math.random()<0.4){
                toggleBlock(i,j,k);
            }
        }
@@ -124,8 +124,23 @@ document.addEventListener('keyup', (e) => {
     if (e.code == 'KeyA') pressA = 0;
 });
 
+function createToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast show';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+  
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+}
+const gameOver = () => {
+    createToast('Game Over');
+}
+
 // sound
 const soundKachi = new Audio('kachi.mp3');
+const soundExplosion = new Audio('bakuhatsu.mp3');
 
 // レイキャスターを作成
 const raycaster = new THREE.Raycaster();
@@ -142,7 +157,13 @@ document.addEventListener('mousedown', (event) => {
     if (intersects.length > 0) {
         const intersectedObject = intersects[0].object;
         intersectedObject.visible = false;
-        soundKachi.play();
+        if(intersectedObject.isExplosive){
+            soundExplosion.play();
+            gameOver();
+        }
+        else{
+            soundKachi.play();
+        }
     }
 });
 
